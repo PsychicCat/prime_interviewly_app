@@ -8,7 +8,8 @@ app.config(['$routeProvider', '$locationProvider', '$mdThemingProvider', functio
     // Color palette
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
-        .accentPalette('orange');
+        .accentPalette('orange')
+        .backgroundPalette('grey');
 
     // HTML5 mode
     $locationProvider.html5Mode({
@@ -91,6 +92,11 @@ app.controller('toolbar', ['$rootScope','$location','$scope', '$window', functio
     });
     $scope.goHome = function(){
         $location.path('/');
+    };
+    $scope.loggedEvent = function(){
+        if($window.sessionStorage.token != undefined){
+            $location.path('/events')
+        }
     }
 }]);
 
@@ -127,3 +133,16 @@ app.directive("passwordVerify", function() {
         }
     };
 });
+
+/* directive to format date */
+angular.module('app')
+    .directive("formatDate", function(){
+        return {
+            require: 'ngModel',
+            link: function(scope, elem, attr, modelCtrl) {
+                modelCtrl.$formatters.push(function(modelValue){
+                    return new Date(modelValue);
+                })
+            }
+        }
+    })
